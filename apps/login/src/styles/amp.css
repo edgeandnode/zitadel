@@ -1,7 +1,7 @@
 /* Amp: maps EDS's fonts and semantic colors onto the login's theme variables. Zitadel sets those inline on <html> from
    the instance's branding settings, so they're `!important` here: EDS wins over whatever the console says. */
-@import "./eds/fonts.css";
-@import "./eds/variables.css";
+@import "@edgeandnode/eds-css/fonts.css";
+@import "@edgeandnode/eds-css/variables.css";
 
 :root {
   color-scheme: light;

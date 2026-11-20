@@ -1,6 +1,6 @@
 // Amp: Zitadel's Tailwind config, with the palettes its components hard-code pointed at EDS's tokens
-// (src/styles/eds/variables.css). Its theme colors (primary, background, …) are CSS variables already;
-// src/styles/amp.css maps those.
+// (`@edgeandnode/eds-css/variables.css`, which src/styles/amp.css imports). Its theme colors (primary, background, …)
+// are CSS variables already; src/styles/amp.css maps those.
 import config from "./tailwind.config.mjs";
 
 // Tailwind's 50–950 steps onto an EDS scale's 100–900

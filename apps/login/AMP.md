@@ -14,8 +14,8 @@ upstream's.
   matching.
 - `amp.tailwind.config.mjs`: upstream's Tailwind config, with the palettes components hard-code (grays, input, state…)
   pointed at EDS's tokens. `src/styles/globals.scss` loads it instead of `tailwind.config.mjs`.
-- `src/styles/eds/`: EDS's CSS variables and the Inter font, copied from `@edgeandnode/eds-css` (MIT, Inter under the
-  OFL) instead of installed, since the package depends on far more than these files.
+- `package.json`: depends on `@edgeandnode/eds-css`, pinned to an exact version, for EDS's CSS variables and the Inter
+  font, which `amp.css` imports. Only its CSS reaches the browser.
 - `src/components/logo.tsx`: always the Amp logo. `src/app/(login)/layout.tsx`: loads `amp.css`, drops Lato.
 
 ## Moving to a newer Zitadel release
@@ -31,6 +31,16 @@ git switch -c benface/zitadel-vX.Y.Z origin/amp/base-vX.Y.Z
 git cherry-pick vOLD..origin/amp/base-vOLD
 git push -u origin benface/zitadel-vX.Y.Z
 gh pr create -R edgeandnode/zitadel --base amp/base-vX.Y.Z --draft
+```
+
+If a cherry-pick conflicts on `pnpm-lock.yaml` (ours adds `@edgeandnode/eds-css`), take the new tag's lockfile,
+add our dependency back with `pnpm install`, then continue:
+
+```sh
+git checkout --ours pnpm-lock.yaml  # in a cherry-pick, "ours" is the branch being built: the new tag's file
+pnpm install
+git add pnpm-lock.yaml
+git cherry-pick --continue
 ```
 
 Once it's merged, make the new base the default branch:
@@ -54,9 +64,8 @@ when a selector stops matching:
   its red border on hover in both themes.
 - A border without a color utility, like the account picker's, is EDS's muted gray, not the text color.
 
-To update EDS, copy `styles/variables.generated.css` to `src/styles/eds/variables.css`, and the Inter part of
-`styles/fonts.css` and its font files to `src/styles/eds/`, from the new `@edgeandnode/eds-css`, then run
-`pnpm exec prettier --write src/styles/eds` from `apps/login`.
+To update EDS, bump the pinned `@edgeandnode/eds-css` version in `package.json`, run `pnpm install` from the
+repository root, and check every screen again.
 
 ## Building
 
