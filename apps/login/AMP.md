@@ -86,15 +86,21 @@ git push origin login-vX.Y.Z-amp.N
 
 The run's summary gives the image's digest. Moving to a newer Zitadel release starts again at `vX.Y.Z-amp.1`.
 
-To build any branch without a git tag, run the workflow by hand with the image tag:
-`gh workflow run amp-login-image.yml -R edgeandnode/zitadel --ref <branch> -f tag=vX.Y.Z-amp.N`. Use a suffix for
-builds that shouldn't ship (`vX.Y.Z-amp.0-test`), then delete that version from the package's settings.
+To build without a git tag, run the workflow by hand with the image tag:
+`gh workflow run amp-login-image.yml -R edgeandnode/zitadel --ref <branch> -f tag=vX.Y.Z-amp.N`. GitHub only offers
+this once the workflow is on the default branch; before that, push a git tag on the branch instead. Use a suffix for
+builds that shouldn't ship (`vX.Y.Z-amp.0-test`), then delete the git tag, and the version in the package's settings.
+
+The package is public, so the cluster pulls it without credentials.
 
 The fork carries upstream's workflows, which need upstream's secrets and runners. They're disabled in the fork's
-Actions settings (not deleted, to keep the diff small): CI, Code Scanning, Add new issues to product management
+Actions settings rather than deleted, to keep the diff small: CI, Code Scanning, Add new issues to product management
 project, `ready_for_review.yml`, and the reusable Lint Test Build, Package und Publish Archives and Images, Release and
-Version. A new upstream workflow arrives enabled when we move to a newer release: disable it with
-`gh workflow disable <name> -R edgeandnode/zitadel`.
+Version. A release that adds a workflow brings it in enabled. GitHub only lists, and lets you disable, a workflow that
+has run, so after moving to a new base, register any new one without running it: on a throwaway branch, replace its
+file with a job that has `if: false` and runs on a push to that branch, push, then
+`gh workflow disable <file name> -R edgeandnode/zitadel` and delete the branch. Keep the skipped runs: deleting a
+workflow's runs unregisters it, and it comes back enabled.
 
 ## Building locally
 
