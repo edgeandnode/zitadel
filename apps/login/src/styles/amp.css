@@ -80,3 +80,50 @@ h1,
 input.bg-input-light-background:hover:not(:focus, .border-warn-light-500) {
   border-color: var(--eds-border-color-form-hover);
 }
+
+/* Upstream's dark hover border (white) also wins over a field's error color, so set it here */
+input.bg-input-light-background.border-warn-light-500:hover {
+  border-color: var(--eds-color-status-error-elevated);
+}
+
+/* Buttons: EDS's medium size, 40px tall like the text fields (Zitadel's are 36px) */
+.leading-36px {
+  height: 40px;
+  padding-inline: 11px;
+  line-height: var(--eds-text-14--line-height, 1.25rem);
+}
+
+/* The identity providers' sign-in buttons, with a 20px icon instead of a 48px box */
+form:has(> input[name="provider"]) > button {
+  height: 40px;
+  padding-inline: 11px;
+}
+
+form:has(> input[name="provider"]) > button :is(.h-12.w-12, svg.h-8.w-8) {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+}
+
+form:has(> input[name="provider"]) > button .my-2 {
+  margin: 0;
+}
+
+form:has(> input[name="provider"]) > button .ml-4 {
+  margin-left: 8px;
+}
+
+/* Primary buttons: EDS's brand border, and its faded brand color when disabled rather than gray */
+.leading-36px.bg-primary-light-500 {
+  border-color: var(--eds-border-color-button-primary-idle);
+}
+
+.leading-36px.bg-primary-light-500:hover:not(:disabled) {
+  border-color: var(--eds-border-color-button-primary-hover);
+}
+
+.leading-36px.bg-primary-light-500:disabled {
+  border-color: var(--eds-border-color-button-primary-disabled);
+  background-color: var(--eds-background-color-button-primary-disabled);
+  color: color-mix(in srgb, var(--eds-text-color-button-primary) 60%, transparent);
+}
