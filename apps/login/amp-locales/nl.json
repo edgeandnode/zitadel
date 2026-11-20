@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Inloggen bij Amp"
+  },
+  "register": {
+    "description": "Maak je Amp-account aan."
+  },
+  "device": {
+    "usercode": {
+      "description": "Voer de code in die in je terminal wordt weergegeven."
+    },
+    "request": {
+      "usercode": "Code in je terminal:",
+      "disclaimer": "Door op Toestaan te klikken, geef je {appName} toestemming om je gegevens te gebruiken volgens de servicevoorwaarden en het privacybeleid ervan. Je kunt deze toegang op elk moment intrekken."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Je Amp-rollen bekijken.",
+      "urn:zitadel:iam:user:resourceowner": "Bekijken bij welke organisatie je account hoort.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Amp gebruiken met jouw toegang."
+    }
+  }
+}

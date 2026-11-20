@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Se connecter à Amp"
+  },
+  "register": {
+    "description": "Créez votre compte Amp."
+  },
+  "device": {
+    "usercode": {
+      "description": "Entrez le code affiché dans votre terminal."
+    },
+    "request": {
+      "usercode": "Code affiché dans votre terminal :",
+      "disclaimer": "En cliquant sur Autoriser, vous permettez à {appName} d'utiliser vos informations conformément à ses conditions d'utilisation et à sa politique de confidentialité. Vous pouvez révoquer cet accès à tout moment."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Voir vos rôles Amp.",
+      "urn:zitadel:iam:user:resourceowner": "Voir à quelle organisation appartient votre compte.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Utiliser Amp avec votre accès."
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "common": {
+    "title": "Bei Amp anmelden"
+  },
+  "register": {
+    "description": "Erstellen Sie Ihr Amp-Konto."
+  },
+  "device": {
+    "usercode": {
+      "description": "Geben Sie den Code ein, der in Ihrem Terminal angezeigt wird."
+    },
+    "request": {
+      "description": "{appName} erhält Zugriff auf:",
+      "usercode": "Code in Ihrem Terminal:",
+      "disclaimer": "Wenn Sie auf Zulassen klicken, erlauben Sie {appName}, Ihre Daten gemäß seinen Nutzungsbedingungen und seiner Datenschutzrichtlinie zu verwenden. Sie können diesen Zugriff jederzeit widerrufen."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Ihre Amp-Rollen einsehen.",
+      "urn:zitadel:iam:user:resourceowner": "Einsehen, zu welcher Organisation Ihr Konto gehört.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Amp mit Ihrem Zugriff nutzen."
+    }
+  }
+}

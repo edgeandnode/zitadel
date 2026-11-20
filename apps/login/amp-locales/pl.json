@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Zaloguj się do Amp"
+  },
+  "register": {
+    "description": "Utwórz konto Amp."
+  },
+  "device": {
+    "usercode": {
+      "description": "Wprowadź kod wyświetlony w terminalu."
+    },
+    "request": {
+      "usercode": "Kod wyświetlony w terminalu:",
+      "disclaimer": "Klikając Zezwól, pozwalasz aplikacji {appName} na korzystanie z Twoich informacji zgodnie z jej warunkami korzystania z usługi i polityką prywatności. Możesz cofnąć ten dostęp w dowolnym momencie."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Wyświetlanie Twoich ról w Amp.",
+      "urn:zitadel:iam:user:resourceowner": "Sprawdzanie, do której organizacji należy Twoje konto.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Korzystanie z Amp z Twoim dostępem."
+    }
+  }
+}

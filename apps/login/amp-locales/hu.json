@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Bejelentkezés az Ampba"
+  },
+  "register": {
+    "description": "Hozd létre az Amp-fiókodat."
+  },
+  "device": {
+    "usercode": {
+      "description": "Add meg a terminálodban megjelenő kódot."
+    },
+    "request": {
+      "usercode": "A terminálodban megjelenő kód:",
+      "disclaimer": "Az Engedélyezés gombra kattintva engedélyezed, hogy a(z) {appName} a saját felhasználási feltételei és adatvédelmi irányelvei szerint használja az adataidat. Ezt a hozzáférést bármikor visszavonhatod."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Az Amp-szerepköreid megtekintése.",
+      "urn:zitadel:iam:user:resourceowner": "Annak megtekintése, hogy a fiókod melyik szervezethez tartozik.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Az Amp használata a hozzáféréseddel."
+    }
+  }
+}

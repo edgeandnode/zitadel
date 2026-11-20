@@ -1,5 +1,6 @@
 "use client";
 
+import { scopeLabel } from "@/lib/amp-i18n";
 import { approveDeviceAuthorization, denyDeviceAuthorization } from "@/lib/server/device";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -54,18 +55,15 @@ export function ConsentScreen({
           </span>
         )}
         {scopes?.map((s) => {
-          const translationKey = `device.scope.${s}`;
-          const description = t(translationKey);
-
-          // Check if the key itself is returned and provide a fallback
-          const resolvedDescription = description === translationKey ? "" : description;
+          // Amp: Amp's scopes have texts, and a scope without one shows its name instead of a blank row
+          const resolvedDescription = scopeLabel(t, s);
 
           return (
             <li
               key={s}
               className="border-divider-light bg-background-light-400 dark:bg-background-dark-400 flex w-full flex-row items-center rounded-md border px-4 py-2 text-sm transition-all"
             >
-              <span>{resolvedDescription}</span>
+              <span className="wrap-anywhere">{resolvedDescription}</span>
             </li>
           );
         })}

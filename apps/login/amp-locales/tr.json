@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Amp'a Giriş"
+  },
+  "register": {
+    "description": "Amp hesabınızı oluşturun."
+  },
+  "device": {
+    "usercode": {
+      "description": "Terminalinizde gösterilen kodu girin."
+    },
+    "request": {
+      "usercode": "Terminalinizde gösterilen kod:",
+      "disclaimer": "İzin Ver'e tıklayarak, {appName} uygulamasının bilgilerinizi kendi hizmet şartları ve gizlilik politikasına uygun olarak kullanmasına izin vermiş olursunuz. Bu erişimi istediğiniz zaman iptal edebilirsiniz."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Amp rollerinizi görme.",
+      "urn:zitadel:iam:user:resourceowner": "Hesabınızın hangi kuruluşa ait olduğunu görme.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Erişiminizle Amp'ı kullanma."
+    }
+  }
+}
