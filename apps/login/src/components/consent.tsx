@@ -63,7 +63,7 @@ export function ConsentScreen({
               key={s}
               className="border-divider-light bg-background-light-400 dark:bg-background-dark-400 flex w-full flex-row items-center rounded-md border px-4 py-2 text-sm transition-all"
             >
-              <span className="[overflow-wrap:anywhere]">{resolvedDescription}</span>
+              <span className="wrap-anywhere">{resolvedDescription}</span>
             </li>
           );
         })}
