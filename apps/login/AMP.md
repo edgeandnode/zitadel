@@ -15,11 +15,28 @@ upstream's.
 
 ## Moving to a newer Zitadel release
 
+`amp/base-vX.Y.Z` is upstream's `vX.Y.Z` tag plus our merged commits. To move from `vOLD` to `vX.Y.Z`, put the new tag
+on a new base branch, then replay our commits on it in a PR:
+
 ```sh
-git fetch https://github.com/zitadel/zitadel.git tag vX.Y.Z --no-tags
+git fetch origin
+git fetch https://github.com/zitadel/zitadel.git tag vOLD tag vX.Y.Z --no-tags
 git push origin 'vX.Y.Z^{commit}:refs/heads/amp/base-vX.Y.Z'
-git switch benface/eds-login
-git rebase --onto vX.Y.Z amp/base-vOLD
+git switch -c benface/zitadel-vX.Y.Z origin/amp/base-vX.Y.Z
+git cherry-pick vOLD..origin/amp/base-vOLD
+git push -u origin benface/zitadel-vX.Y.Z
+gh pr create -R edgeandnode/zitadel --base amp/base-vX.Y.Z --draft
+```
+
+Once it's merged, make the new base the default branch:
+`gh repo edit edgeandnode/zitadel --default-branch amp/base-vX.Y.Z`.
+
+Move each PR that's still open on the old base too, from a checkout of its branch:
+
+```sh
+git rebase --onto origin/amp/base-vX.Y.Z origin/amp/base-vOLD
+git push --force-with-lease
+gh pr edit <number> --base amp/base-vX.Y.Z
 ```
 
 Then build it and check every screen in light and dark: a component that starts using a new color or class may need a

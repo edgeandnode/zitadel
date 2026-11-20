@@ -1,5 +1,6 @@
-import "@/styles/amp.css";
 import "@/styles/globals.scss";
+// Amp: after globals.scss, so its base styles come after Tailwind's
+import "@/styles/amp.css";
 
 import { BackgroundWrapper } from "@/components/background-wrapper";
 import { LanguageProvider } from "@/components/language-provider";
