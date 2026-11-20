@@ -3,6 +3,7 @@ import { createTranslator } from "next-intl";
 import { join } from "path";
 import { describe, expect, it } from "vitest";
 import en from "../../amp-locales/en.json";
+import upstreamEn from "../../locales/en.json";
 import { loadAmpMessages, scopeLabel } from "./amp-i18n";
 import { LANGS } from "./i18n";
 import { mergeMessages } from "./merge-messages";
@@ -19,11 +20,20 @@ function keys(messages: Record<string, unknown>, prefix = ""): string[] {
 }
 
 describe("Amp's texts", () => {
-  it("cover every locale the login ships, with the same keys as English", async () => {
+  it("cover every locale the login ships, with at least English's keys", async () => {
     const files = readdirSync(join(__dirname, "../../amp-locales")).sort();
     expect(files).toEqual(LANGS.map((l) => `${l.code}.json`).sort());
     for (const { code } of LANGS) {
-      expect(keys(await loadAmpMessages(code)).sort(), code).toEqual(keys(en).sort());
+      expect(keys(await loadAmpMessages(code)), code).toEqual(expect.arrayContaining(keys(en)));
+    }
+  });
+
+  // A key upstream renamed would leave Amp's text unused. The scope labels are Amp's own keys.
+  it("only replace texts upstream still has, besides scope labels", async () => {
+    const upstream = keys(upstreamEn);
+    for (const { code } of LANGS) {
+      const replaced = keys(await loadAmpMessages(code)).filter((key) => !key.startsWith("device/scope/"));
+      expect(upstream, code).toEqual(expect.arrayContaining(replaced));
     }
   });
 

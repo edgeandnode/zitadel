@@ -10,6 +10,7 @@
       "description": "Geben Sie den Code ein, der in Ihrem Terminal angezeigt wird."
     },
     "request": {
+      "description": "{appName} erhält Zugriff auf:",
       "usercode": "Code in Ihrem Terminal:",
       "disclaimer": "Wenn Sie auf Zulassen klicken, erlauben Sie {appName}, Ihre Daten gemäß seinen Nutzungsbedingungen und seiner Datenschutzrichtlinie zu verwenden. Sie können diesen Zugriff jederzeit widerrufen."
     },
