@@ -1,0 +1,80 @@
+/* Amp: maps EDS's fonts and semantic colors onto the login's theme variables. Zitadel sets those inline on <html> from
+   the instance's branding settings, so they're `!important` here: EDS wins over whatever the console says. */
+@import "./eds/fonts.css";
+@import "./eds/variables.css";
+
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+/* Each `--theme-light-*` and `--theme-dark-*` pair gets the same EDS token, whose `light-dark()` follows the color
+   scheme above */
+:root {
+  /* Page, then cards: lighter than the page in both themes, like the docs' surfaces */
+  --amp-page: light-dark(var(--eds-color-foam-100), var(--eds-color-space-900));
+  --amp-surface: light-dark(var(--eds-color-white), var(--eds-color-space-800));
+
+  --theme-light-background-600: var(--amp-page) !important;
+  --theme-dark-background-600: var(--amp-page) !important;
+  --theme-light-background-500: var(--amp-surface) !important;
+  --theme-dark-background-500: var(--amp-surface) !important;
+  --theme-light-background-400: var(--amp-surface) !important;
+  --theme-dark-background-400: var(--amp-surface) !important;
+
+  --theme-light-primary-200: var(--eds-background-color-brand-subtler) !important;
+  --theme-dark-primary-200: var(--eds-background-color-brand-subtler) !important;
+  --theme-light-primary-300: var(--eds-background-color-brand-elevated) !important;
+  --theme-dark-primary-300: var(--eds-background-color-brand-elevated) !important;
+  --theme-light-primary-400: var(--eds-background-color-button-primary-hover) !important;
+  --theme-dark-primary-400: var(--eds-background-color-button-primary-hover) !important;
+  --theme-light-primary-500: var(--eds-background-color-button-primary-idle) !important;
+  --theme-dark-primary-500: var(--eds-background-color-button-primary-idle) !important;
+  --theme-light-primary-contrast-300: var(--eds-text-color-button-primary) !important;
+  --theme-dark-primary-contrast-300: var(--eds-text-color-button-primary) !important;
+  --theme-light-primary-contrast-500: var(--eds-text-color-button-primary) !important;
+  --theme-dark-primary-contrast-500: var(--eds-text-color-button-primary) !important;
+
+  --theme-light-warn-400: var(--eds-color-status-error-elevated) !important;
+  --theme-dark-warn-400: var(--eds-color-status-error-elevated) !important;
+  --theme-light-warn-500: var(--eds-color-status-error-default) !important;
+  --theme-dark-warn-500: var(--eds-color-status-error-default) !important;
+
+  --theme-light-text-500: var(--eds-text-color-default) !important;
+  --theme-dark-text-500: var(--eds-text-color-default) !important;
+  --theme-light-text-secondary-500: var(--eds-text-color-muted) !important;
+  --theme-dark-text-secondary-500: var(--eds-text-color-muted) !important;
+
+  /* Tailwind's radii, which the login's roundness setting picks from */
+  --radius-md: var(--eds-radius-8);
+  --radius-lg: var(--eds-radius-12);
+}
+
+html {
+  /* Over next/font's class and the branding's custom font */
+  font-family: var(--eds-font-sans) !important;
+  color: var(--eds-text-color-default);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+.ztdl-h1 {
+  font-weight: var(--eds-font-weight-medium);
+}
+
+/* Borders without a color utility (Tailwind's default is `currentColor`). In Tailwind's base layer, so utilities win. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--eds-border-color-muted);
+  }
+}
+
+/* Text fields: EDS's form border on hover, not black or white */
+input.bg-input-light-background:hover:not(:focus) {
+  border-color: var(--eds-border-color-form-hover);
+}
