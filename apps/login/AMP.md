@@ -17,6 +17,7 @@ upstream's.
 - `package.json`: depends on `@edgeandnode/eds-css`, pinned to an exact version, for EDS's CSS variables and the Inter
   font, which `amp.css` imports. Only its CSS reaches the browser.
 - `src/components/logo.tsx`: always the Amp logo. `src/app/(login)/layout.tsx`: loads `amp.css`, drops Lato.
+- `.github/workflows/amp-login-image.yml`: builds and publishes the image (see Publishing).
 
 ## Moving to a newer Zitadel release
 
@@ -67,14 +68,42 @@ when a selector stops matching:
 To update EDS, bump the pinned `@edgeandnode/eds-css` version in `package.json`, run `pnpm install` from the
 repository root, and check every screen again.
 
-## Building
+## Publishing
+
+`.github/workflows/amp-login-image.yml` builds the login on Linux and pushes `ghcr.io/edgeandnode/zitadel-login`
+(`linux/amd64`), tagged `vX.Y.Z-amp.N` and with the commit's full SHA. `vX.Y.Z` is the Zitadel release the commit is
+based on (the workflow checks it), and `N` counts our builds on it, from 1. Nothing is ever tagged `latest`, and the
+workflow refuses to overwrite a tag that exists.
+
+Merging doesn't publish. To ship the default branch, tag it `login-vX.Y.Z-amp.N`, with the next `N`:
+
+```sh
+git fetch origin --tags
+git tag -l 'login-vX.Y.Z-amp.*'
+git tag login-vX.Y.Z-amp.N origin/amp/base-vX.Y.Z
+git push origin login-vX.Y.Z-amp.N
+```
+
+The run's summary gives the image's digest. Moving to a newer Zitadel release starts again at `vX.Y.Z-amp.1`.
+
+To build any branch without a git tag, run the workflow by hand with the image tag:
+`gh workflow run amp-login-image.yml -R edgeandnode/zitadel --ref <branch> -f tag=vX.Y.Z-amp.N`. Use a suffix for
+builds that shouldn't ship (`vX.Y.Z-amp.0-test`), then delete that version from the package's settings.
+
+The fork carries upstream's workflows, which need upstream's secrets and runners. They're disabled in the fork's
+Actions settings (not deleted, to keep the diff small): CI, Code Scanning, Add new issues to product management
+project, `ready_for_review.yml`, and the reusable Lint Test Build, Package und Publish Archives and Images, Release and
+Version. A new upstream workflow arrives enabled when we move to a newer release: disable it with
+`gh workflow disable <name> -R edgeandnode/zitadel`.
+
+## Building locally
 
 From the repository root, on Linux (the build bundles native modules for the platform it runs on):
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm nx run @zitadel/login:build
-docker build -t ghcr.io/edgeandnode/zitadel-login:vX.Y.Z-amp.N apps/login
+docker build -t zitadel-login:local apps/login
 ```
 
 The image runs like upstream's `ghcr.io/zitadel/zitadel-login`, with the same environment variables.

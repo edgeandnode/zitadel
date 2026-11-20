@@ -1,0 +1,131 @@
+# Edge & Node's fork: builds Amp's login (apps/login, styled with EDS) and publishes it to
+# ghcr.io/edgeandnode/zitadel-login. See apps/login/AMP.md.
+name: Amp login image
+
+on:
+  push:
+    tags:
+      - "login-v*-amp.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Image tag: vX.Y.Z-amp.N, where vX.Y.Z is the Zitadel release this commit is based on"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.tag }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/zitadel-login
+  NX_NO_CLOUD: "true"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - name: Resolve the image tag
+        id: tag
+        env:
+          EVENT: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [ "$EVENT" = "push" ]; then
+            tag="${REF_NAME#login-}"
+          else
+            tag="$INPUT_TAG"
+          fi
+          if ! printf '%s' "$tag" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+-amp\.[0-9]+(-[0-9A-Za-z.]+)?$'; then
+            echo "::error::'$tag' isn't a vX.Y.Z-amp.N tag"
+            exit 1
+          fi
+          zitadel="${tag%%-amp.*}"
+          # The tag names the Zitadel release the build is based on: make sure it is.
+          git fetch --no-tags https://github.com/zitadel/zitadel.git "refs/tags/$zitadel:refs/tags/upstream-$zitadel"
+          if ! git merge-base --is-ancestor "upstream-$zitadel" HEAD; then
+            echo "::error::$GITHUB_SHA isn't based on Zitadel $zitadel"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "zitadel=$zitadel" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refuse to overwrite an existing tag
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          if docker manifest inspect "$IMAGE:$TAG" > /dev/null 2>&1; then
+            echo "::error::$IMAGE:$TAG already exists. Tag a new N instead."
+            exit 1
+          fi
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the login
+        run: pnpm nx run --nxBail @zitadel/login:build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push the image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/login
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.tag.outputs.tag }}
+            ${{ env.IMAGE }}:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.title=zitadel-login
+            org.opencontainers.image.description=Zitadel's login, styled with the Edge Design System
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ steps.tag.outputs.tag }}
+            org.opencontainers.image.licenses=MIT
+
+      - name: Summary
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          {
+            echo "### $IMAGE:$TAG"
+            echo
+            echo "- Digest: \`$DIGEST\`"
+            echo "- Also tagged \`$GITHUB_SHA\`"
+            echo "- Reference: \`$IMAGE:$TAG@$DIGEST\`"
+          } >> "$GITHUB_STEP_SUMMARY"
