@@ -22,11 +22,18 @@ upstream's.
 ## Moving to a newer Zitadel release
 
 `amp/base-vX.Y.Z` is upstream's `vX.Y.Z` tag plus our merged commits. To move from `vOLD` to `vX.Y.Z`, put the new tag
-on a new base branch, then replay our commits on it in a PR:
+on a new base branch, then replay our commits on it in a PR. Fetch both tags first:
 
 ```sh
 git fetch origin
 git fetch https://github.com/zitadel/zitadel.git tag vOLD tag vX.Y.Z --no-tags
+git diff --name-status --diff-filter=AR vOLD vX.Y.Z -- .github/workflows
+```
+
+If that lists a workflow, the release adds (or renames) one, and it arrives enabled: pushing the new base and opening
+the PR are events it may run on. Disable it first, as "Upstream's workflows" says. Then:
+
+```sh
 git push origin 'vX.Y.Z^{commit}:refs/heads/amp/base-vX.Y.Z'
 git switch -c benface/zitadel-vX.Y.Z origin/amp/base-vX.Y.Z
 git cherry-pick vOLD..origin/amp/base-vOLD
@@ -70,10 +77,10 @@ repository root, and check every screen again.
 
 ## Publishing
 
-`.github/workflows/amp-login-image.yml` builds the login on Linux and pushes `ghcr.io/edgeandnode/zitadel-login`
-(`linux/amd64`), tagged `vX.Y.Z-amp.N` and with the commit's full SHA. `vX.Y.Z` is the Zitadel release the commit is
-based on (the workflow checks it), and `N` counts our builds on it, from 1. Nothing is ever tagged `latest`, and the
-workflow refuses to overwrite a tag that exists.
+`.github/workflows/amp-login-image.yml` builds the login on Linux and pushes `ghcr.io/edgeandnode/zitadel-login` for
+`linux/amd64` and `linux/arm64`, tagged `vX.Y.Z-amp.N` and with the commit's full SHA. `vX.Y.Z` is the Zitadel release
+the commit is based on: the workflow checks it's the newest upstream release the commit contains. `N` counts our builds
+on it, from 1. Nothing is ever tagged `latest`, and the workflow refuses to overwrite a tag that exists.
 
 Merging doesn't publish. To ship the default branch, tag it `login-vX.Y.Z-amp.N`, with the next `N`:
 
@@ -93,14 +100,18 @@ builds that shouldn't ship (`vX.Y.Z-amp.0-test`), then delete the git tag, and t
 
 The package is public, so the cluster pulls it without credentials.
 
+### Upstream's workflows
+
 The fork carries upstream's workflows, which need upstream's secrets and runners. They're disabled in the fork's
 Actions settings rather than deleted, to keep the diff small: CI, Code Scanning, Add new issues to product management
 project, `ready_for_review.yml`, and the reusable Lint Test Build, Package und Publish Archives and Images, Release and
-Version. A release that adds a workflow brings it in enabled. GitHub only lists, and lets you disable, a workflow that
-has run, so after moving to a new base, register any new one without running it: on a throwaway branch, replace its
-file with a job that has `if: false` and runs on a push to that branch, push, then
-`gh workflow disable <file name> -R edgeandnode/zitadel` and delete the branch. Keep the skipped runs: deleting a
-workflow's runs unregisters it, and it comes back enabled.
+Version.
+
+GitHub only lists a workflow, and lets you disable it, once it has run. To disable a new one without running it: on a
+throwaway branch, replace its file with a job that has `if: false` and runs on a push to that branch, push the branch
+(GitHub records a skipped run), run `gh workflow disable <file name> -R edgeandnode/zitadel`, then delete the branch.
+Leave the skipped run. When we deleted those runs, 7 of the 8 workflows went from disabled to `deleted` (CI didn't),
+and the next push of their files enabled them again.
 
 ## Building locally
 
