@@ -94,7 +94,7 @@ input.bg-input-light-background.border-warn-light-500:hover {
 }
 
 /* The identity providers' sign-in buttons: 40px, EDS's secondary hover border (not black or white), and a 20px icon box
-   instead of a 48px one. Each provider's markup differs (sign-in-with-*.tsx), so the box centers whatever it holds. */
+   instead of a 48px one. Upstream's markup (sign-in-with-*.tsx) already centers each logo in its box. */
 form:has(> input[name="provider"]) > button {
   height: 40px;
   padding-inline: 11px;
@@ -105,10 +105,8 @@ form:has(> input[name="provider"]) > button:hover:not(:focus) {
 }
 
 form:has(> input[name="provider"]) > button :is(.h-12.w-12, .my-2) {
-  display: flex;
+  /* Or a long label squeezes the logo */
   flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
   width: 20px;
   height: 20px;
   margin: 0;
