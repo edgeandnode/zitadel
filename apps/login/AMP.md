@@ -7,6 +7,11 @@ upstream's.
 
 - `src/styles/amp.css`: maps EDS's fonts and semantic colors onto the login's theme variables, light and dark. Zitadel
   sets those from the instance's branding settings at runtime, so they're `!important`: EDS wins over the console.
+  It also restyles components that the variables can't reach (button and sign-in button sizes, the sign-in buttons'
+  icons, primary buttons, the text fields' hover and error borders) by selecting upstream's own class names, like
+  `.leading-36px`, `.bg-primary-light-500`, `.bg-input-light-background`, `.border-warn-light-500` and `.h-12.w-12`,
+  and the sign-in forms by their `input[name="provider"]`. If a release renames one of them, its rule silently stops
+  matching.
 - `amp.tailwind.config.mjs`: upstream's Tailwind config, with the palettes components hard-code (grays, input, state…)
   pointed at EDS's tokens. `src/styles/globals.scss` loads it instead of `tailwind.config.mjs`.
 - `src/styles/eds/`: EDS's CSS variables and the Inter font, copied from `@edgeandnode/eds-css` (MIT, Inter under the
@@ -40,7 +45,14 @@ gh pr edit <number> --base amp/base-vX.Y.Z
 ```
 
 Then build it and check every screen in light and dark: a component that starts using a new color or class may need a
-mapping in `amp.css` or `amp.tailwind.config.mjs`.
+mapping in `amp.css` or `amp.tailwind.config.mjs`. Check what `amp.css` selects by class name too, since nothing fails
+when a selector stops matching:
+
+- Buttons and sign-in buttons are 40px tall, like the text fields, with the provider's logo whole and centered.
+- Primary buttons have EDS's brand border, and its faded brand color when disabled.
+- Text fields and sign-in buttons get EDS's gray border on hover, not black or white, and a field with an error keeps
+  its red border on hover in both themes.
+- A border without a color utility, like the account picker's, is EDS's muted gray, not the text color.
 
 To update EDS, copy `styles/variables.generated.css` to `src/styles/eds/variables.css`, and the Inter part of
 `styles/fonts.css` and its font files to `src/styles/eds/`, from the new `@edgeandnode/eds-css`, then run

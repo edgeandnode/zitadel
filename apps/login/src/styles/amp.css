@@ -93,20 +93,38 @@ input.bg-input-light-background.border-warn-light-500:hover {
   line-height: var(--eds-text-14--line-height, 1.25rem);
 }
 
-/* The identity providers' sign-in buttons, with a 20px icon instead of a 48px box */
+/* The identity providers' sign-in buttons: 40px, EDS's secondary hover border (not black or white), and a 20px icon box
+   instead of a 48px one. Each provider's markup differs (sign-in-with-*.tsx), so the box centers whatever it holds. */
 form:has(> input[name="provider"]) > button {
   height: 40px;
   padding-inline: 11px;
 }
 
-form:has(> input[name="provider"]) > button :is(.h-12.w-12, svg.h-8.w-8) {
+form:has(> input[name="provider"]) > button:hover:not(:focus) {
+  border-color: var(--eds-border-color-button-secondary-hover);
+}
+
+form:has(> input[name="provider"]) > button :is(.h-12.w-12, .my-2) {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   width: 20px;
   height: 20px;
+  margin: 0;
   padding: 0;
 }
 
-form:has(> input[name="provider"]) > button .my-2 {
-  margin: 0;
+/* Logos that scale (a viewBox), and Apple's wrapper around its logo, fill the box */
+form:has(> input[name="provider"]) > button :is(.h-12.w-12, .my-2) > :is(svg[viewBox], div) {
+  width: 100%;
+  height: 100%;
+}
+
+/* GitLab's has no viewBox, so sizing it would cut it off: it keeps its 25×24px, scaled down to the box's 20px */
+form:has(> input[name="provider"]) > button :is(.h-12.w-12, .my-2) > svg:not([viewBox]) {
+  flex-shrink: 0;
+  transform: scale(0.8);
 }
 
 form:has(> input[name="provider"]) > button .ml-4 {
@@ -123,7 +141,6 @@ form:has(> input[name="provider"]) > button .ml-4 {
 }
 
 .leading-36px.bg-primary-light-500:disabled {
-  border-color: var(--eds-border-color-button-primary-disabled);
   background-color: var(--eds-background-color-button-primary-disabled);
   color: color-mix(in srgb, var(--eds-text-color-button-primary) 60%, transparent);
 }
