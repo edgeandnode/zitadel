@@ -1,3 +1,4 @@
+import { loadAmpMessages } from "@/lib/amp-i18n";
 import { LANGS, LANGUAGE_COOKIE_NAME, LANGUAGE_HEADER_NAME } from "@/lib/i18n";
 import { mergeMessages } from "@/lib/merge-messages";
 import { getServiceConfig } from "@/lib/service-url";
@@ -85,6 +86,14 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: mergeMessages(fallbackMessages, localeMessages, customMessages) as Record<string, string>,
+    // Amp: Amp's texts go last. Zitadel returns its default texts along with the ones stored in it, so they'd
+    // replace Amp's otherwise. A locale without Amp's texts gets them in English.
+    messages: mergeMessages(
+      fallbackMessages,
+      localeMessages,
+      customMessages,
+      await loadAmpMessages(fallback),
+      await loadAmpMessages(locale),
+    ) as Record<string, string>,
   };
 });

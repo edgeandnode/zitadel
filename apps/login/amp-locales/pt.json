@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Entrar no Amp"
+  },
+  "register": {
+    "description": "Crie sua conta Amp."
+  },
+  "device": {
+    "usercode": {
+      "description": "Insira o código exibido no seu terminal."
+    },
+    "request": {
+      "usercode": "Código exibido no seu terminal:",
+      "disclaimer": "Ao clicar em Permitir, você autoriza {appName} a usar suas informações de acordo com seus termos de serviço e sua política de privacidade. Você pode revogar este acesso a qualquer momento."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Ver suas funções no Amp.",
+      "urn:zitadel:iam:user:resourceowner": "Ver a qual organização sua conta pertence.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "Usar o Amp com seu acesso."
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "Ampにサインイン"
+  },
+  "register": {
+    "description": "Ampアカウントを作成します。"
+  },
+  "device": {
+    "usercode": {
+      "description": "ターミナルに表示されたコードを入力してください。"
+    },
+    "request": {
+      "usercode": "ターミナルに表示されたコード：",
+      "disclaimer": "「許可」をクリックすると、{appName}がその利用規約およびプライバシーポリシーに従ってあなたの情報を使用することを許可します。このアクセスはいつでも取り消すことができます。"
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "Ampのロールを表示します。",
+      "urn:zitadel:iam:user:resourceowner": "アカウントが所属する組織を表示します。",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "あなたのアクセス権でAmpを使用します。"
+    }
+  }
+}

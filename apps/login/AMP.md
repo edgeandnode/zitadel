@@ -18,6 +18,15 @@ upstream's.
   font, which `amp.css` imports. Only its CSS reaches the browser.
 - `src/components/logo.tsx`: always the Amp logo. `src/app/(login)/layout.tsx`: loads `amp.css`, drops Lato.
 - `.github/workflows/amp-login-image.yml`: builds and publishes the image (see Publishing).
+- `amp-locales/<locale>.json`: Amp's texts, for every locale in `locales/`: the tab title, the registration page's
+  description, the device code and consent pages' wording for our CLIs ("the code shown in your terminal", a disclaimer
+  without Zitadel), and the labels of the scopes our CLIs request. `src/i18n/request.ts` merges them last, over
+  upstream's `locales/` and over the texts Zitadel returns (which include Zitadel's defaults even when nothing is stored
+  there), so texts stored in Zitadel can't change these keys. A unit test checks that every locale has the same keys.
+- `src/lib/amp-i18n.ts`: loads `amp-locales/`, and picks each scope's label on the consent page
+  (`src/components/consent.tsx`). A project's audience scope (`urn:zitadel:iam:org:project:id:<id>:aud`) is matched by
+  pattern, since the project ID differs per environment. A scope without a label shows its name instead of a blank row.
+- `src/app/icon.svg` and `src/app/apple-icon.png`: the Amp favicon (from ampdb-docs and ampdb-app). Upstream has none.
 
 ## Moving to a newer Zitadel release
 
@@ -71,6 +80,9 @@ when a selector stops matching:
 - Text fields and sign-in buttons get EDS's gray border on hover, not black or white, and a field with an error keeps
   its red border on hover in both themes.
 - A border without a color utility, like the account picker's, is EDS's muted gray, not the text color.
+- The keys in `amp-locales/` still exist in `locales/en.json`, since a renamed key leaves Amp's text unused: the tab
+  title, the registration page's description, and the device code and consent pages, signed in during the device flow
+  and after a reload, with every scope labeled.
 
 To update EDS, bump the pinned `@edgeandnode/eds-css` version in `package.json`, run `pnpm install` from the
 repository root, and check every screen again.

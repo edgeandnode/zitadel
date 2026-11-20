@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "登录 Amp"
+  },
+  "register": {
+    "description": "创建您的 Amp 账户。"
+  },
+  "device": {
+    "usercode": {
+      "description": "输入终端中显示的代码。"
+    },
+    "request": {
+      "usercode": "终端中显示的代码：",
+      "disclaimer": "点击“允许”即表示您允许 {appName} 根据其服务条款和隐私政策使用您的信息。您可以随时撤销此访问权限。"
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "查看您的 Amp 角色。",
+      "urn:zitadel:iam:user:resourceowner": "查看您的账户所属的组织。",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "以您的访问权限使用 Amp。"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "common": {
+    "title": "تسجيل الدخول إلى Amp"
+  },
+  "register": {
+    "description": "أنشئ حساب Amp الخاص بك."
+  },
+  "device": {
+    "usercode": {
+      "description": "أدخل الرمز المعروض في الطرفية."
+    },
+    "request": {
+      "usercode": "الرمز المعروض في الطرفية:",
+      "disclaimer": "بالنقر فوق سماح، فإنك تسمح لـ {appName} باستخدام معلوماتك وفقاً لشروط الخدمة وسياسة الخصوصية الخاصة به. يمكنك إلغاء هذا الوصول في أي وقت."
+    },
+    "scope": {
+      "urn:zitadel:iam:org:projects:roles": "عرض أدوارك في Amp.",
+      "urn:zitadel:iam:user:resourceowner": "معرفة المؤسسة التي ينتمي إليها حسابك.",
+      "urn:zitadel:iam:org:project:id:{projectId}:aud": "استخدام Amp بصلاحيات الوصول الخاصة بك."
+    }
+  }
+}
